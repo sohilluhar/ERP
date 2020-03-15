@@ -29,12 +29,18 @@
                             <div class="form-group">
                                 <label class="text-black-50" for="fullname">Full name</label>
                                 <input class="form-control" id="fullname" name="fullname" type="text"
-                                       placeholder="Enter Name" required>
+                                       placeholder="Enter Name" required
+                                       value="<?php echo $_SESSION['tempusername'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="text-black-50" for="emailid">Email ID</label>
                                 <input class="form-control" id="emailid" name="emailid" type="email"
                                        placeholder="Enter mail id"
+                                       hidden value="<?php echo $_SESSION['tempusermail'] ?>"
+                                       required>
+                                <input class="form-control" id="emailid" name="emailid" type="email"
+                                       placeholder="Enter mail id"
+                                       disabled value="<?php echo $_SESSION['tempusermail'] ?>"
                                        required>
                             </div>
                             <div class="form-group">
