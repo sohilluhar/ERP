@@ -52,7 +52,7 @@ if ($_SESSION["issubmitted"] == 1) {
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form id="quickForm" role="form" method="POST">
+                            <form id="quickForm" enctype="multipart/form-data" role="form" method="POST">
                                 <div class="card-body">
 
 
@@ -682,6 +682,37 @@ if ($_SESSION["issubmitted"] == 1) {
                                         ></textarea>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="filephoto">Upload Photo</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" name="filephoto"
+                                                               id="filephoto" required>
+                                                        <label class="custom-file-label" for="filephoto">Choose
+                                                            file</label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="filesign">Upload Sign</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" name="filesign"
+                                                               id="filesign" required>
+                                                        <label class="custom-file-label" for="filesign">Choose
+                                                            file</label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
@@ -719,7 +750,13 @@ include "include/javascripts.php";
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="include/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        bsCustomFileInput.init();
+    });
+</script>
 <script>
 
     function filllocaladdress() {
@@ -1129,81 +1166,154 @@ include "include/javascripts.php";
 <?php
 if (isset($_POST['submit_student_form'])) {
 
-    $srno = $_POST['srno'];
-    $capid = $_POST['capid'];
-    $title = $_POST['title'];
-    $sname = $_POST['sname'];
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $mname = $_POST['mname'];
-    $dob = $_POST['dob'];
-    $age1 = $_POST['age1'];
-    $gender = $_POST['gender'];
-    $religion = $_POST['religion'];
-    $cast = $_POST['cast'];
-    $address = $_POST['address'];
-    $district = $_POST['district'];
-    $state = $_POST['state'];
-    $pincode = $_POST['pincode'];
-    $paddress = $_POST['paddress'];
-    $pdistrict = $_POST['pdistrict'];
-    $pstate = $_POST['pstate'];
-    $ppincode = $_POST['ppincode'];
-    $resphone = $_POST['resphone'];
-    $stuphone = $_POST['stuphone'];
-    $fatherphone = $_POST['fatherphone'];
-    $smail = $_POST['smail'];
-    $aadhar = $_POST['aadhar'];
-    $courses = $_POST['courses'];
-    $level = $_POST['level'];
-    $admissionyear = $_POST['admissionyear'];
-    $admittedto = $_POST['admittedto'];
-    $sscper = $_POST['sscper'];
-    $hscper = $_POST['hscper'];
-    $diplomaper = $_POST['diplomaper'];
-    $beper = $_POST['beper'];
-    $admitted = $_POST['admitted'];
-    $result = $_POST['result'];
-    $currentstatus = $_POST['currentstatus'];
-    $SEM_I = $_POST['SEM-I'];
-    $SEM_II = $_POST['SEM-II'];
-    $SEM_III = $_POST['SEM-III'];
-    $SEM_IV = $_POST['SEM-IV'];
-    $SEM_V = $_POST['SEM-V'];
-    $SEM_VI = $_POST['SEM-VI'];
-    $SEM_VII = $_POST['SEM-VII'];
-    $SEM_VIII = $_POST['SEM-VIII'];
-    $ME_SEM_I = $_POST['ME-SEM-I'];
-    $ME_SEM_II = $_POST['ME-SEM-II'];
-    $ME_SEM_III = $_POST['ME-SEM-III'];
-    $ME_SEM_IV = $_POST['ME-SEM-IV'];
-    $remark = $_POST['remark'];
-    $date = date('d-m-Y', time());
-    $userid = $_SESSION["user_id"];
+    $uploadOk = 1;
+    $tmpFilePath = $_FILES['filephoto']['tmp_name'];
+    $tmpFilePath1 = $_FILES['filephoto']['name'];
+    $file_path = '';
 
-    $query = "
+//Make sure we have a filepath
+    if ($tmpFilePath != "") {
+
+        if ($_FILES["filephoto"]["size"] < 5000000) {
+            //save the filename
+            $shortname = $_FILES['filephoto']['name'];
+
+            //save the url and the file
+            $filePath = "upload/" . $_SESSION["user_id"] . '-photo.jpg';
+
+            $imageFileType = strtolower(pathinfo($tmpFilePath1, PATHINFO_EXTENSION));
+
+
+            if ($imageFileType == "jpg") {
+
+                move_uploaded_file($tmpFilePath, $filePath);
+                $file_path = $filePath;
+
+            } else {
+                $uploadOk = 0;
+                $msg = '<script>alert("Sorry, File format is not supported. Upload Only jpg.")</script>';
+                echo $msg;
+            }
+            //}
+        } else {
+            $uploadOk = 0;
+            $msg = '<script>alert("Sorry, your file should not be more than 5MB.")</script>';
+            echo $msg;
+        }
+
+        $uploadOk = 1;
+        $tmpFilePath = $_FILES['filesign']['tmp_name'];
+        $tmpFilePath1 = $_FILES['filesign']['name'];
+        $file_path = '';
+
+//Make sure we have a filepath
+        if ($tmpFilePath != "") {
+
+            if ($_FILES["filesign"]["size"] < 5000000) {
+                //save the filename
+                $shortname = $_FILES['filesign']['name'];
+
+                //save the url and the file
+                $filePath = "upload/" . $_SESSION["user_id"] . '-sign.jpg';
+
+                $imageFileType = strtolower(pathinfo($tmpFilePath1, PATHINFO_EXTENSION));
+
+
+                if ($imageFileType == "jpg") {
+
+                    move_uploaded_file($tmpFilePath, $filePath);
+                    $file_path = $filePath;
+
+                } else {
+                    $uploadOk = 0;
+                    $msg = '<script>alert("Sorry, File format is not supported. Upload Only jpg.")</script>';
+                    echo $msg;
+                }
+            }
+        } else {
+            $uploadOk = 0;
+            $msg = '<script>alert("Sorry, your file should not be more than 5MB.")</script>';
+            echo $msg;
+        }
+
+        if ($uploadOk == 1) {
+            $srno = $_POST['srno'];
+            $capid = $_POST['capid'];
+            $title = $_POST['title'];
+            $sname = $_POST['sname'];
+            $fname = $_POST['fname'];
+            $lname = $_POST['lname'];
+            $mname = $_POST['mname'];
+            $dob = $_POST['dob'];
+            $age1 = $_POST['age1'];
+            $gender = $_POST['gender'];
+            $religion = $_POST['religion'];
+            $cast = $_POST['cast'];
+            $address = $_POST['address'];
+            $district = $_POST['district'];
+            $state = $_POST['state'];
+            $pincode = $_POST['pincode'];
+            $paddress = $_POST['paddress'];
+            $pdistrict = $_POST['pdistrict'];
+            $pstate = $_POST['pstate'];
+            $ppincode = $_POST['ppincode'];
+            $resphone = $_POST['resphone'];
+            $stuphone = $_POST['stuphone'];
+            $fatherphone = $_POST['fatherphone'];
+            $smail = $_POST['smail'];
+            $aadhar = $_POST['aadhar'];
+            $courses = $_POST['courses'];
+            $level = $_POST['level'];
+            $admissionyear = $_POST['admissionyear'];
+            $admittedto = $_POST['admittedto'];
+            $sscper = $_POST['sscper'];
+            $hscper = $_POST['hscper'];
+            $diplomaper = $_POST['diplomaper'];
+            $beper = $_POST['beper'];
+            $admitted = $_POST['admitted'];
+            $result = $_POST['result'];
+            $currentstatus = $_POST['currentstatus'];
+            $SEM_I = $_POST['SEM-I'];
+            $SEM_II = $_POST['SEM-II'];
+            $SEM_III = $_POST['SEM-III'];
+            $SEM_IV = $_POST['SEM-IV'];
+            $SEM_V = $_POST['SEM-V'];
+            $SEM_VI = $_POST['SEM-VI'];
+            $SEM_VII = $_POST['SEM-VII'];
+            $SEM_VIII = $_POST['SEM-VIII'];
+            $ME_SEM_I = $_POST['ME-SEM-I'];
+            $ME_SEM_II = $_POST['ME-SEM-II'];
+            $ME_SEM_III = $_POST['ME-SEM-III'];
+            $ME_SEM_IV = $_POST['ME-SEM-IV'];
+            $remark = $_POST['remark'];
+            $date = date('d-m-Y', time());
+            $userid = $_SESSION["user_id"];
+
+            $query = "
     INSERT INTO `student_form` (
-     `srno`, `capid`, `title`, `sname`,`fname`, `lname`, `mname`, `dob`, `age1`, `gender`, `religion`, `cast`, `address`, `district`,`state`, 
-     `pincode`, `paddress`, `pdistrict`, `pstate`, `ppincode`, `resphone`, `stuphone`, `fatherphone`, `smail`, `aadhar`, `courses`, 
-     `level`, `admissionyear`, `admittedto`, `sscper`, `hscper`, `diplomaper`, `beper`, `admitted`, `result`, `currentstatus`, 
-     `SEM-I`, `SEM-II`, `SEM-III`, `SEM-IV`, `SEM-V`, `SEM-VI`, `SEM-VII`, `SEM-VIII`, `ME-SEM-I`, `ME-SEM-II`, `ME-SEM-III`, `ME-SEM-IV`, 
-     `remark`,`last_update`,`userid` ) 
+     `srno`, `capid`, `title`, `sname`,`fname`, `lname`, `mname`, `dob`, `age1`, `gender`, `religion`, `cast`, `address`, `district`,`state`,
+     `pincode`, `paddress`, `pdistrict`, `pstate`, `ppincode`, `resphone`, `stuphone`, `fatherphone`, `smail`, `aadhar`, `courses`,
+     `level`, `admissionyear`, `admittedto`, `sscper`, `hscper`, `diplomaper`, `beper`, `admitted`, `result`, `currentstatus`,
+     `SEM-I`, `SEM-II`, `SEM-III`, `SEM-IV`, `SEM-V`, `SEM-VI`, `SEM-VII`, `SEM-VIII`, `ME-SEM-I`, `ME-SEM-II`, `ME-SEM-III`, `ME-SEM-IV`,
+     `remark`,`last_update`,`userid` )
      VALUES ( '$srno', '$capid', '$title', '$sname','$fname', '$lname', '$mname', '$dob', '$age1', '$gender', '$religion', '$cast', '$address', '$district','$state',
-     '$pincode', '$paddress', '$pdistrict', '$pstate', '$ppincode', '$resphone', '$stuphone', '$fatherphone', '$smail', '$aadhar', '$courses', 
-     '$level', '$admissionyear', '$admittedto', '$sscper', '$hscper', '$diplomaper', '$beper', '$admitted', '$result', '$currentstatus', 
-     '$SEM_I', '$SEM_II', '$SEM_III', '$SEM_IV', '$SEM_V', '$SEM_VI', '$SEM_VII', '$SEM_VIII', 
+     '$pincode', '$paddress', '$pdistrict', '$pstate', '$ppincode', '$resphone', '$stuphone', '$fatherphone', '$smail', '$aadhar', '$courses',
+     '$level', '$admissionyear', '$admittedto', '$sscper', '$hscper', '$diplomaper', '$beper', '$admitted', '$result', '$currentstatus',
+     '$SEM_I', '$SEM_II', '$SEM_III', '$SEM_IV', '$SEM_V', '$SEM_VI', '$SEM_VII', '$SEM_VIII',
      '$ME_SEM_I', '$ME_SEM_II', '$ME_SEM_III', '$ME_SEM_IV',
       '$remark','$date','$userid' );
-    
+
     ";
 
-    mysqli_query($con, $query);
+            mysqli_query($con, $query);
 
 
-    $query1 = "UPDATE `users` SET `form` = '1' WHERE `users`.`id` = " . $_SESSION["user_id"];
+            $query1 = "UPDATE `users` SET `form` = '1' WHERE `users`.`id` = " . $_SESSION["user_id"];
 
-    mysqli_query($con, $query1);
-    echo '
+            mysqli_query($con, $query1);
+
+
+            echo '
     <script>
     
     Swal.fire({
@@ -1218,9 +1328,10 @@ if (isset($_POST['submit_student_form'])) {
 </script>
     
     ';
+        }
 
+    }
 }
-
 ?>
 
 

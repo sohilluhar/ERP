@@ -670,6 +670,17 @@ include("include/checkadmin.php");
                                     ><?php echo $row['remark']; ?></textarea>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a class="btn btn-primary" target="_blank"
+                                           href="./upload/<?php echo $row['userid'] ?>-photo.jpg">View Photo</a>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a class="btn btn-primary" target="_blank"
+                                           href="./upload/<?php echo $row['userid'] ?>-sign.jpg">View Sign</a>
+                                    </div>
+                                </div>
+
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
